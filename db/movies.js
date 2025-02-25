@@ -17,12 +17,23 @@ const createMovie = async(movieName) => {
 const getAllMovies = async() => {
   try {
     const { rows } = await client.query(`
-        SELECT movie_name FROM movies; 
+        SELECT * FROM movies; 
       `)
-      return rows;
+      return rows[0];
   } catch(error) {
     console.log(error);
   }
 }
 
-module.exports = { createMovie, getAllMovies };
+const getOneMovie = async(movieId) => {
+  try {
+    const { rows } = await client.query(`
+        SELECT * FROM movies WHERE id = ${movieId}
+      `)
+      return rows[0];
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createMovie, getAllMovies, getOneMovie };
