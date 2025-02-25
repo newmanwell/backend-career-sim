@@ -1,6 +1,7 @@
 const client = require('./client.js');
 const { createUser } = require('./users.js');
 const { createMovie } = require('./movies.js');
+const { createReview } = require('./reviews.js');
 
 const dropTables = async() => {
   try {
@@ -73,7 +74,11 @@ const syncAndSeed = async() => {
     console.log('Movies Created');
 
     console.log("Creating Reviews");
-
+    await createReview(movieDumbAndDumber.id, userShaun.id, 'A cinematic masterpiece', 5);
+    await createReview(movieTopGun.id, userRyan.id, 'You can be my wingman', 4);
+    await createReview(movieTerminator2.id, userShaun.id, 'The very best of Arnold', 4.9);
+    await createReview(movieNCFOM.id, userMaureen.id, 'My boyfriend made me watch this', 3.9);
+    await createReview(movieOceans13.id, userJoe.id, 'More Clooney please', 4.8);
     console.log('Reviews Created');
 
     await client.end();
