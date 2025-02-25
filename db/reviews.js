@@ -1,10 +1,10 @@
 const client = require('./client.js');
 
-const createReview = async(movieId, userId, movieReview, movieRating) => {
+const createReview = async(movieId, userId, movieTitle, movieReview, movieRating) => {
   try {
     const { rows } = await client.query(`
-        INSERT INTO reviews_and_ratings (movie_id, user_id, review, rating)
-        VALUES (${movieId}, ${userId}, '${movieReview}', ${movieRating})
+        INSERT INTO reviews_and_ratings (movie_id, user_id, movie_title, review, rating)
+        VALUES (${movieId}, ${userId}, '${movieTitle}', '${movieReview}', ${movieRating})
         RETURNING *;
       `)
       const review = rows[0];
@@ -14,4 +14,15 @@ const createReview = async(movieId, userId, movieReview, movieRating) => {
   }
 }
 
-module.exports = { createReview };
+const getOneMovieReview = async(requestedMovieId) => {
+  try {
+    const { rows } = await client.query (`
+      SELECT * FROM reviews_and_ratings WHERE movie_id = ${requestedMovieId}
+      `)
+      return rows[0];
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createReview, getOneMovieReview };
