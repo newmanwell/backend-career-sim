@@ -14,4 +14,15 @@ const createMovie = async(movieName) => {
   }
 }
 
-module.exports = { createMovie };
+const getAllMovies = async() => {
+  try {
+    const { rows } = await client.query(`
+        SELECT movie_name FROM movies; 
+      `)
+      return rows;
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createMovie, getAllMovies };

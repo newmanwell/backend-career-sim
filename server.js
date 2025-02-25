@@ -8,6 +8,7 @@ const client = require('./db/client.js');
 client.connect();
 
 const { createUser } = require('./db/users.js');
+const { getAllMovies } = require('./db/movies.js');
 
 // Add a user
 app.post('/api/auth/register', async(req, res) => {
@@ -21,7 +22,14 @@ app.post('/api/auth/register', async(req, res) => {
   }
 });
 
-
+// Show all movies in table
+app.get('/api/movies', async(req, res) => {
+  try {
+    res.send(await getAllMovies());
+  } catch {
+    next(error);
+  }
+})
 
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
