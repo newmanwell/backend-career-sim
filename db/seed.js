@@ -1,6 +1,16 @@
 const client = require('./client.js');
 
-
+const dropTables = async() => {
+  try {
+    await client.query(`
+      DROP TABLE IF EXISTS reviews_and_ratings;
+      DROP TABLE IF EXISTS users;
+      DROP TABLE IF EXISTS movies;
+      `)
+  } catch(error) {
+    console.log(error);
+  }
+}
 
 const createTables = async() => {
   try {
@@ -34,16 +44,18 @@ const createTables = async() => {
 const syncAndSeed = async() => {
   try {
     await client.connect();
-    console.log('Connected to movie_reviews DB')
+    console.log('Connected to movie_reviews DB');
+
+    console.log('Dropping Tables');
+    dropTables();
+    console.log('Tables Dropped');
 
     console.log('Creating Tables');
     await createTables();
     console.log('Tables Created');
 
-
-
     await client.end();
-    console.log('Disconnected from movie_reviews DB')
+    console.log('Disconnected from movie_reviews DB');
   } catch(error) {
     console.log(error);
   }
