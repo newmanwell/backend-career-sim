@@ -1,5 +1,6 @@
 const client = require('./client.js');
 const { createUser } = require('./users.js');
+const { createMovie } = require('./movies.js');
 
 const dropTables = async() => {
   try {
@@ -56,12 +57,24 @@ const syncAndSeed = async() => {
     console.log('Tables Created');
 
     console.log('Creating Users');
-    await createUser('shaun', 'shaun1');
-    await createUser('ryan', 'ryan1');
-    await createUser('joe', 'joe1');
-    await createUser('brianna', 'brianna1');
-    await createUser('maureen', 'maureen1');
+    const userShaun = await createUser('shaun', 'shaun1');
+    const userRyan = await createUser('ryan', 'ryan1');
+    const userJoe = await createUser('joe', 'joe1');
+    const userBrianna = await createUser('brianna', 'brianna1');
+    const userMaureen = await createUser('maureen', 'maureen1');
     console.log('Users Created');
+
+    console.log('Creating Movies');
+    const movieDumbAndDumber = await createMovie('Dumb and Dumber');
+    const movieTopGun = await createMovie('Top Gun');
+    const movieTerminator2 = await createMovie('Terminator 2');
+    const movieNCFOM = await createMovie('No Country For Old Men');
+    const movieOceans13 = await createMovie('Oceans Thirteen');
+    console.log('Movies Created');
+
+    console.log("Creating Reviews");
+
+    console.log('Reviews Created');
 
     await client.end();
     console.log('Disconnected from movie_reviews DB');
