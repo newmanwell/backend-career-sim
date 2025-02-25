@@ -9,6 +9,7 @@ client.connect();
 
 const { createUser } = require('./db/users.js');
 const { getAllMovies, getOneMovie } = require('./db/movies.js');
+const { getOneMovieReview } = require('./db/reviews.js')
 
 // Not loged in routes
 
@@ -43,6 +44,17 @@ app.get('/api/movies/:id', async(req, res, next) => {
     next(error)
   }
 });
+
+// Show one movie review/rating
+app.get('/api/movies/:id/reviews', async(req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    res.send(await getOneMovieReview(id));
+  } catch(error) {
+    next(error);
+  } 
+})
 
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
