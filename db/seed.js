@@ -1,4 +1,5 @@
 const client = require('./client.js');
+const { createUser } = require('./users.js');
 
 const dropTables = async() => {
   try {
@@ -18,7 +19,7 @@ const createTables = async() => {
           CREATE TABLE users (
           id SERIAL PRIMARY KEY,
           name VARCHAR(30) NOT NULL UNIQUE,
-          password VARCHAR(30) NOT NULL
+          password VARCHAR(60) NOT NULL
         );
 
         CREATE TABLE movies (
@@ -53,6 +54,14 @@ const syncAndSeed = async() => {
     console.log('Creating Tables');
     await createTables();
     console.log('Tables Created');
+
+    console.log('Creating Users');
+    await createUser('shaun', 'shaun1');
+    await createUser('ryan', 'ryan1');
+    await createUser('joe', 'joe1');
+    await createUser('brianna', 'brianna1');
+    await createUser('maureen', 'maureen1');
+    console.log('Users Created');
 
     await client.end();
     console.log('Disconnected from movie_reviews DB');
