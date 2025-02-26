@@ -42,4 +42,24 @@ const loginUser = async(name, password) => {
   }
 }
 
-module.exports = { createUser, loginUser };
+const getUserInfo = async(token) => {
+  try {
+    require('dotenv').config();
+    const verifyToken = await jwt.verify(token, process.env.JWT_SECRET);
+    const { rows } = await client.query(`
+      SELECT id, name FROM users WHERE name='${verifyToken.name}'
+      `);
+    
+      const user = rows[0];
+
+      if (user) {
+        return user
+      } else {
+        return { message: 'Invalid User'}
+      }
+    } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createUser, loginUser, getUserInfo };

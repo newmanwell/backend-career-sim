@@ -7,7 +7,7 @@ app.use(express.json());
 const client = require('./db/client.js');
 client.connect();
 
-const { createUser, loginUser } = require('./db/users.js');
+const { createUser, loginUser, getUserInfo } = require('./db/users.js');
 const { getAllMovies, getOneMovie } = require('./db/movies.js');
 const { getOneMovieReview } = require('./db/reviews.js');
 
@@ -66,7 +66,18 @@ app.post('/api/auth/login', async(req, res, next) => {
   } catch(error) {
     next(error);
   }
-})
+});
 
+// Logged in routes
+
+// See account info
+app.get('/api/auth/me', async(req, res, next) => {
+  try {
+    const userDetails = await getUserInfo(req.headers.authorization);
+    res.send(userDetails);
+  } catch(error) {
+    next(error);
+  }
+});
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
