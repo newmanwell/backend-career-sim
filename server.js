@@ -7,9 +7,9 @@ app.use(express.json());
 const client = require('./db/client.js');
 client.connect();
 
-const { createUser } = require('./db/users.js');
+const { createUser, loginUser } = require('./db/users.js');
 const { getAllMovies, getOneMovie } = require('./db/movies.js');
-const { getOneMovieReview } = require('./db/reviews.js')
+const { getOneMovieReview } = require('./db/reviews.js');
 
 // Not loged in routes
 
@@ -41,7 +41,7 @@ app.get('/api/movies/:id', async(req, res, next) => {
   try {
     res.send(await getOneMovie(id));
   } catch(error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -54,6 +54,18 @@ app.get('/api/movies/:id/reviews', async(req, res, next) => {
   } catch(error) {
     next(error);
   } 
+});
+
+// Login route
+app.post('/api/auth/login', async(req, res, next) => {
+  const { name, password } = req.body;
+
+  try {
+    const token = await loginUser(name, password);
+    res.send({ token: token })
+  } catch(error) {
+    next(error);
+  }
 })
 
 

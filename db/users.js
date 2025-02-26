@@ -1,5 +1,6 @@
 const client = require('./client.js');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const createUser = async(name, password) => {
   try {
@@ -17,4 +18,28 @@ const createUser = async(name, password) => {
   }
 }
 
-module.exports = { createUser };
+const loginUser = async(name, password) => {
+  try {
+    const { rows } = await client.query(`
+      SELECT * FROM users WHERE name='${name}';
+      `);
+      const user = rows[0];
+
+      if (user) {
+        const doesPasswordMatch = await bcrypt.compare(password, user.password);
+        if(doesPasswordMatch) {
+          require('dotenv').config();
+          const token = await jwt.sign({ name: user.name }, process.env.JWT_SECRET);
+          return token;
+        } else {
+          throw new Error('Login Not Valid');
+        }
+      } else {
+        throw new Error('Login Not Valid');
+      }
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createUser, loginUser };
