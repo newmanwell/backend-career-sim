@@ -19,7 +19,7 @@ const getAllMovies = async() => {
     const { rows } = await client.query(`
         SELECT * FROM movies; 
       `)
-      return rows[0];
+      return rows;
   } catch(error) {
     console.log(error);
   }
