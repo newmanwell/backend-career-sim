@@ -1,4 +1,5 @@
 const client = require('./client.js');
+const jwt = require('jsonwebtoken');
 
 const createReview = async(movieId, userName, movieTitle, movieReview, movieRating) => {
   try {
@@ -25,4 +26,24 @@ const getOneMovieReview = async(requestedMovieId) => {
   }
 }
 
-module.exports = { createReview, getOneMovieReview };
+const getMyMovieReviews = async(token) => {
+  try {
+    require('dotenv').config();
+    const verifyToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+    const { rows } = await client.query(`
+        SELECT * FROM reviews_and_ratings WHERE user_name='${verifyToken.name}'
+      `)
+      const reviews = rows;
+
+      if (rows) {
+        return rows
+      } else {
+        return { message: 'Invalid User'};
+      }
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createReview, getOneMovieReview, getMyMovieReviews };
