@@ -1,10 +1,10 @@
 const client = require('./client.js');
 
-const createReview = async(movieId, userId, movieTitle, movieReview, movieRating) => {
+const createReview = async(movieId, userName, movieTitle, movieReview, movieRating) => {
   try {
     const { rows } = await client.query(`
-        INSERT INTO reviews_and_ratings (movie_id, user_id, movie_title, review, rating)
-        VALUES (${movieId}, ${userId}, '${movieTitle}', '${movieReview}', ${movieRating})
+        INSERT INTO reviews_and_ratings (movie_id, user_name, movie_title, review, rating)
+        VALUES (${movieId}, '${userName}', '${movieTitle}', '${movieReview}', ${movieRating})
         RETURNING *;
       `)
       const review = rows[0];

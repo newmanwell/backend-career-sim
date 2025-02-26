@@ -32,7 +32,7 @@ const createTables = async() => {
         CREATE TABLE reviews_and_ratings (
           id SERIAL PRIMARY KEY,
           movie_id INTEGER REFERENCES movies(id),
-          user_id INTEGER REFERENCES users(id),
+          user_name VARCHAR(30) REFERENCES users(name),
           movie_title VARCHAR(30) UNIQUE NOT NULL REFERENCES movies(movie_name),
           review VARCHAR(200) NOT NULL,
           rating INTEGER NOT NULL
@@ -75,11 +75,11 @@ const syncAndSeed = async() => {
     console.log('Movies Created');
 
     console.log("Creating Reviews");
-    await createReview(movieDumbAndDumber.id, userShaun.id, movieDumbAndDumber.movie_name, 'A cinematic masterpiece', 5);
-    await createReview(movieTopGun.id, userRyan.id, movieTopGun.movie_name, 'You can be my wingman', 4);
-    await createReview(movieTerminator2.id, userShaun.id, movieTerminator2.movie_name, 'The very best of Arnold', 4.9);
-    await createReview(movieNCFOM.id, userMaureen.id, movieNCFOM.movie_name, 'My boyfriend made me watch this', 3.9);
-    await createReview(movieOceans13.id, userJoe.id, movieOceans13.movie_name, 'More Clooney please', 4.8);
+    await createReview(movieDumbAndDumber.id, userShaun.name, movieDumbAndDumber.movie_name, 'A cinematic masterpiece', 5);
+    await createReview(movieTopGun.id, userRyan.name, movieTopGun.movie_name, 'You can be my wingman', 4);
+    await createReview(movieTerminator2.id, userShaun.name, movieTerminator2.movie_name, 'The very best of Arnold', 4.9);
+    await createReview(movieNCFOM.id, userMaureen.name, movieNCFOM.movie_name, 'My boyfriend made me watch this', 3.9);
+    await createReview(movieOceans13.id, userJoe.name, movieOceans13.movie_name, 'More Clooney please', 4.8);
     console.log('Reviews Created');
 
     await client.end();
