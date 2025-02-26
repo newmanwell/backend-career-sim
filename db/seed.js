@@ -33,7 +33,7 @@ const createTables = async() => {
           id SERIAL PRIMARY KEY,
           movie_id INTEGER REFERENCES movies(id),
           user_name VARCHAR(30) REFERENCES users(name),
-          movie_title VARCHAR(30) UNIQUE NOT NULL REFERENCES movies(movie_name),
+          movie_title VARCHAR(30) NOT NULL REFERENCES movies(movie_name),
           review VARCHAR(200) NOT NULL,
           rating INTEGER NOT NULL
         )
