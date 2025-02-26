@@ -9,7 +9,7 @@ client.connect();
 
 const { createUser, loginUser, getUserInfo } = require('./db/users.js');
 const { getAllMovies, getOneMovie } = require('./db/movies.js');
-const { getOneMovieReview, getMyMovieReviews } = require('./db/reviews.js');
+const { getOneMovieReview, getMyMovieReviews, deleteMyReview } = require('./db/reviews.js');
 
 // Not loged in routes
 
@@ -80,10 +80,26 @@ app.get('/api/auth/me', async(req, res, next) => {
   }
 });
 
-// See loged in reviews
+// See logged in reviews
 app.get('/api/reviews/me', async(req, res, next) => {
+  try {
   const moviesReviewed = await getMyMovieReviews(req.headers.authorization);
   res.send(moviesReviewed);
+  } catch(error) {
+    next(error)
+  }
+});
+
+// Delete a logged in review
+app.delete('/api/reviews/:id', async(req, res, next) => {
+  const { id } = req.params 
+
+  try {
+    const reviewToDelete = await deleteMyReview(req.headers.authorization, id);
+    res.send('movie review deleted');
+  } catch(error) {
+    next(error);
+  }
 })
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));

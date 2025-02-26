@@ -46,4 +46,21 @@ const getMyMovieReviews = async(token) => {
   }
 }
 
-module.exports = { createReview, getOneMovieReview, getMyMovieReviews };
+const deleteMyReview = async(token, deleteReviewId) => {
+  try {
+    require('dotenv').config();
+    const verifyToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+    if(verifyToken) {
+    await client.query(`
+      DELETE FROM reviews_and_ratings WHERE id=${deleteReviewId} AND user_name='${verifyToken.name}'
+      `)
+    } else {
+      return { message: 'Invalid user or review'}
+    }
+  } catch(error) {
+    console.log(error);
+  } 
+}
+
+module.exports = { createReview, getOneMovieReview, getMyMovieReviews, deleteMyReview };
