@@ -76,6 +76,8 @@ const addLoggedInReview = async(token, movieId, movieTitle, movieReview, movieRa
       `)
       const review = rows[0];
       return review;
+    } else {
+      console.log(error);
     }
   } catch(error) {
     console.log(error);
