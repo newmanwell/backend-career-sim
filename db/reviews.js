@@ -63,4 +63,23 @@ const deleteMyReview = async(token, deleteReviewId) => {
   } 
 }
 
-module.exports = { createReview, getOneMovieReview, getMyMovieReviews, deleteMyReview };
+const addLoggedInReview = async(token, movieId, movieTitle, movieReview, movieRating) => {
+  try {
+    require('dotenv').config();
+    const verifyToken = await jwt.verify(token, process.env.JWT_SECRET);
+
+    if (verifyToken) {
+      const { rows } = await client.query(`
+        INSERT INTO reviews_and_ratings (movie_id, user_name, movie_title, review, rating)
+        VALUES (${movieId}, '${verifyToken.name}', '${movieTitle}', '${movieReview}', ${movieRating})
+        RETURNING *;
+      `)
+      const review = rows[0];
+      return review;
+    }
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+module.exports = { createReview, getOneMovieReview, getMyMovieReviews, deleteMyReview, addLoggedInReview };

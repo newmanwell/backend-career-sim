@@ -9,7 +9,7 @@ client.connect();
 
 const { createUser, loginUser, getUserInfo } = require('./db/users.js');
 const { getAllMovies, getOneMovie } = require('./db/movies.js');
-const { getOneMovieReview, getMyMovieReviews, deleteMyReview } = require('./db/reviews.js');
+const { getOneMovieReview, getMyMovieReviews, deleteMyReview, addLoggedInReview } = require('./db/reviews.js');
 
 // Not loged in routes
 
@@ -100,6 +100,20 @@ app.delete('/api/reviews/:id', async(req, res, next) => {
   } catch(error) {
     next(error);
   }
-})
+});
+
+// Add a review when logged in
+app.post('/api/movies/:id/reviews', async(req, res, next) => {
+  const { id } = req.params;
+  const { movieName, movieReview, movieRating } = req.body;
+
+
+  try {
+    const reviewToAdd = await addLoggedInReview(req.headers.authorization, id, movieName, movieReview, movieRating);
+    res.send(reviewToAdd);
+  } catch(error) {
+    next(error)
+  }
+});
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
